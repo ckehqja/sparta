@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+</head>
+
+<body>
+    <h1>Welcome</h1>
+    <p id="welcomeMessage"></p>
+
+    <script>
+        // 쿠키에서 사용자 이름 가져오기
+        function getCookie(name) {
+            var cookieArray = document.cookie.split(';');
+            for (var i = 0; i < cookieArray.length; i++) {
+                var cookie = cookieArray[i].trim();
+                if (cookie.indexOf(name + '=') === 0) {
+                    return decodeURIComponent(cookie.substring(name.length + 1));
+                }
+            }
+            return null;
+        }
+
+        var userName = getCookie('userName');
+        if (userName) {
+            // 사용자 이름이 있는 경우 환영 메시지 표시
+            document.getElementById('welcomeMessage').textContent = 'Welcome, ' + userName + '!';
+        } else {
+            // 사용자 이름이 없는 경우 다른 처리를 할 수 있음
+            document.getElementById('welcomeMessage').textContent = 'Welcome!';
+        }
+    </script>
+</body>
+
+</html>
