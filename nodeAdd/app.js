@@ -13,13 +13,22 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 
+// const mysql = require('mysql')
+// const connection = mysql.createConnection({
+//     host: 'localhost',
+//     user: 'testuser',
+//     password: '3545',
+//     port: 3300,
+//     database: 'test'
+// });
+
 const mysql = require('mysql')
 const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'testuser',
-    password: '3545',
-    port: 3300,
-    database: 'test'
+    host: '15.165.92.197',
+    user: 'JUYEON',
+    password: 'a1234',
+    port: 3306,
+    database: 'jomijin'
 });
 
 app.get('/join', (request, response) => {
@@ -27,16 +36,16 @@ app.get('/join', (request, response) => {
 })
 
 app.post('/join', (request, response) => {
-    let username = request.body.userId;
+    let userId = request.body.userId;
     let password = request.body.password;
     let confirm_password = request.body.confirm_password;
     let email = request.body.email;
     let nickname = request.body.nickname;
+    console.log(userId, password, email, nickname);
 
-    var sql = `insert into contact(username, password, email, nickname)
-    values(?,?,?,?, now())`
+    var sql = `insert into member(user_id, pw, email, user_name) values(?,?,?,?)`
 
-    var values = [username, password, email, nickname];
+    var values = [userId, password, email, nickname];
 
     connection.query(sql, values, function(err, result) {
         if(err) throw err;
