@@ -7,8 +7,9 @@ var session = require('express-session')
 
 var connection = require('./db');
 
+//edit
 
-//바디 파싱 허용
+//바디 파싱 허용~~~ ddddd
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
