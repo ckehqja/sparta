@@ -9,7 +9,7 @@ var connection = require('./db');
 
 //edit
 
-//바디 파싱 허용~~~ ddddd
+//바디 파싱 허용~~~ dsdfsdfsdfsddddd
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
