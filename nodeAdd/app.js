@@ -7,7 +7,7 @@ var session = require('express-session')
 
 var connection = require('./db');
 
-//edit
+//git test push 
 
 //바디 파싱 허용~~~ dsdfsdfsdfsddddd
 app.use(bodyParser.urlencoded({ extended: true }));
