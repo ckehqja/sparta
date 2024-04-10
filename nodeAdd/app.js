@@ -24,22 +24,22 @@ app.get('/signup', (request, response) => {
 })
 
 app.post('/signup', (request, response) => {
-    let user_id = request.body.user_id;
+    let member_id = request.body.member_id;
     let pw = request.body.pw;
     let confirm_pw = request.body.confirm_pw;
     let email = request.body.email;
     let user_name = request.body.user_name;
 
-    if (user_id && pw && confirm_pw) {
-        connection.query('select * from member where user_id = ?', [user_id], function (err, results) {
+    if (member_id && pw && confirm_pw) {
+        connection.query('select * from member where member_id = ?', [member_id], function (err, results) {
             if (err) throw error;
             if (results.length <= 0 && pw == confirm_pw) {
-                var sql = 'insert into member (user_id, pw, email, user_name) values(?,?,?,?)'
-                var values = [user_id, pw, email, user_name];
+                var sql = 'insert into member (member_id, pw, email, user_name) values(?,?,?,?)'
+                var values = [member_id, pw, email, user_name];
                 connection.query(sql, values, function (err, data) {
                     if (err) throw error2;
                     response.send("<script> alert('환영합니다.');location.href='/';</script>");
-                    console.log(user_id + ' sign up')
+                    console.log(member_id + ' sign up')
                 });
             } else if (pw != confirm_pw) {
                 response.send("<script> alert('비밀번호가 서로 일치하지 않습니다..');location.href='/signup';</script>")
@@ -62,12 +62,12 @@ app.get('/login', (request, response) => {
 })
 
 app.post('/login', (request, response) => {
-    const user_id = request.body.user_id;
+    const member_id = request.body.member_id;
     const pw = request.body.pw;
 
-    var sql = `select user_id from member where user_id = ? and pw =?`
-    var values = [user_id, pw];
-    console.log(user_id, pw);
+    var sql = `select user_id from member where member_id = ? and pw =?`
+    var values = [member_id, pw];
+    console.log(member_id, pw);
 
     connection.query(sql, values, function (err, result) {
         if (err) throw err;
