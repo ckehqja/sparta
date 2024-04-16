@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<style>
+  /* 모달 스타일 */
+  .modal {
+    display: block;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  .modal-content {
+    background-color: #cccccc;
+    margin: 5% auto 15% auto;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 500px;
+    height: 600px;
+    position: relative;
+  }
+
+  .animalFormBox {
+    height: 550px;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: space-evenly;
+  }
+
+  .modal-content div {
+    flex: 0 0 100%;
+  }
+
+  .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+  }
+
+  /* 등록 버튼 스타일 */
+  #registerBtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    float: right;
+  }
+
+  #registerBtn:hover {
+    background-color: #45a049;
+  }
+
+  /* 애니메이션 효과 */
+  .modal-content {
+    animation: zoomIn 0.3s;
+  }
+
+  @keyframes zoomIn {
+    from {
+      transform: scale(0);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
+</style>
+<body>
+
+<!-- 모달 열기 버튼 -->
+<button onclick="openModal()">동물 정보 입력</button>
+
+<!-- 모달 팝업을 담는 곳 -->
+<div id="modalContainer"></div>
+
+
+<!-- 모달 팝업 -->
+<div id="myModal" class="modal">
+  <!-- 모달 팝업 콘텐츠 -->
+  <div class="modal-content">
+    <!-- 모달 닫기 버튼 -->
+    <span class="close">&times;</span>
+
+    <!-- 입력 폼 -->
+    <form id="animalForm">
+      <div class="animalFormBox">
+        <div>
+          <label for="animalUrl">동물 사진 URL:</label>
+          <input type="text" id="animalUrl" name="animalUrl" required><br><br>
+        </div>
+        <div>
+          <label for="animalName">동물 이름:</label>
+          <input type="text" id="animalName" name="animalName" required><br><br>
+        </div>
+        <div>
+          <label for="mbti">MBTI:</label>
+          <input type="text" id="mbti" name="mbti" required><br><br>
+        </div>
+        <div>
+          <label for="advantage">장점:</label>
+          <input type="text" id="advantage" name="advantage" required><br><br>
+        </div>
+        <div>
+          <label for="collaboration">협업 스타일:</label>
+          <input type="text" id="collaboration" name="collaboration" required><br><br>
+        </div>
+        <div>
+          <label for="blogUrl">블로그 주소:</label>
+          <input type="text" id="blogUrl" name="blogUrl" required><br><br>
+        </div>
+      </div>
+      <!-- 등록 버튼 -->
+      <button type="button" id="registerBtn">등록</button>
+    </form>
+  </div>
+</div>
+<script>
+  const registerBtn = document.getElementById("registerBtn");
+  const modal = document.getElementById("myModal");
+  const closeBtn = document.getElementsByClassName("close")[0];
+
+  // 모달 열기
+  function openModal() {
+    modal.style.display = "block";
+  }
+
+  // 모달 닫기
+  function closeModal() {
+    modal.style.display = "none";
+  }
+
+  // 모달 닫기 버튼 클릭 이벤트
+  closeBtn.onclick = function () {
+    closeModal();
+  }
+
+  // 모달 외부 클릭 시 닫기
+  window.onclick = function (event) {
+    if (event.target == modal) {
+      closeModal();
+    }
+  }
+
+  // 등록 버튼 클릭 이벤트
+  registerBtn.addEventListener("click", async function (){
+    const animalUrlInput = document.getElementById("animalUrl").value;
+    const animalNameInput = document.getElementById("animalName").value;
+    const mbtiInput = document.getElementById("mbti").value;
+    const advantageInput = document.getElementById("advantage").value;
+    const collaborationInput = document.getElementById("collaboration").value;
+    const blogUrlInput = document.getElementById("blogUrl").value;
+
+    const data = {
+      animalUrl: animalUrlInput,
+      animalName: animalNameInput,
+      mbti: mbtiInput,
+      advantage: advantageInput,
+      collaboration: collaborationInput,
+      blogUrl: blogUrlInput
+    };
+
+    // Firestore REST API로 데이터 전송
+    fetch("https://firestore.googleapis.com/v1/projects/miniproject-739f0/databases/(default)/documents/postProfile", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify({ fields: data })
+    }).then(response => {
+      if (!response.ok) {
+        throw new Error("HTTP error " + response.status);
+      }
+      return response.json();
+    }).then(data => {
+      console.log("Document written with ID: ", data.name);
+      // 성공적으로 등록되었음을 사용자에게 알림
+      alert("등록되었습니다!");
+      document.getElementById("animalForm").reset();
+      closeModal();
+    }).catch(error => {
+      console.error("Error adding document: ", error);
+      // 오류가 발생했을 때 사용자에게 알림
+      alert("등록 중 오류가 발생했습니다. 다시 시도해주세요.");
+    });
+  });
+</script>
+</body>
+</html>
